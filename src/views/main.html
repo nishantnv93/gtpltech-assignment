@@ -1,267 +1,213 @@
-<div>
-    <div ng-controller="formUpdateCtrl">
-        <div class="container mt-3">
-            <div class="card">
-                <div class="card-header">Customer</div>
-                <div class="card-body">
-                    <div class="container mt-3">
-                        <form>
-                            <div>
-                                <div class="form-group">
-                                    <label for="text">UUID:</label>
-                                    <input type="text" class="form-control" placeholder="Enter UUID" id="uuid"
-                                        ng-model="customers.uuid">
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Name:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Name" id="name"
-                                        ng-model="customers.name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Display Name:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Display Name"
-                                        id="displayName" ng-model="customers.displayName">
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Version:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Version" id="version"
-                                        ng-model="customers.version" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Created By:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Display Name"
-                                        id="displayName" ng-model="customers.createdBy.ref.displayName">
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Tags:</label>
-                                    <select class="form-control" ng-model="customers.tags" disabled>
-                                        <option ng-repeat="item in customers.tags" ng-value="item">
-                                            {{item}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Desc:</label>
-                                    <textarea class="form-control" placeholder="Enter Desc" id="desc"
-                                        ng-model="customers.desc"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">DataPod types:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Datapod typer" id="email"
-                                        ng-model="customers.datapodType" disabled>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="text">Data Source:</label>
-                                            <input type="text" class="form-control" placeholder="Enter Datasource"
-                                                id="email" ng-model="customers.datasource.ref.datasource">
+<div ng-controller="updateDataCtrl">
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="d-flex justify-content-around mb-3">
+                            <div class="p-2">
+                                <div class="card" style="width: 36rem;">
+                                    <div class="card-body">
+
+                                        <div ng-controller="updateDataCtrl">
+                                            <button class="btn btn-success" ng-click="enableAddData()"><i
+                                                    class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <div class=" table-responsive-sm">
+                                                <table class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Description</th>
+                                                            <th>Web Reference</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-if="addData">
+                                                            <form>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="courseDetailss.name" />
+                                                                </td>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="courseDetailss.description" /></td>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="courseDetailss.webReference" />
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-info"
+                                                                        ng-click="saveTable()">Save</button>
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-danger"
+                                                                        ng-click="disableForm()"><i
+                                                                            class="fa fa-times"></i></button>
+                                                                </td>
+                                                            </form>
+                                                        </tr>
+                                                        <tr ng-repeat="course in courses">
+                                                            <td><input type="text" ng-model="course.name"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td><input type="text" ng-model="course.description"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td><input type="text" ng-model="course.webReference"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-info"
+                                                                    ng-click="editTable($index)"
+                                                                    ng-hide="enableEdit[{{$index}}]"><i
+                                                                        class="fa fa-pencil-square-o"></i></button>
+                                                                <button type="submit" class="btn btn-sm btn-info"
+                                                                    ng-click="updateTable($index)"
+                                                                    ng-hide="!enableEdit[{{$index}}]"><i
+                                                                        class="fa fa-floppy-o"></i></button>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    ng-hide="enableEdit[{{$index}}]"
+                                                                    ng-click="deleteTable($index)"><i
+                                                                        class="fa fa-trash"></i></button>
+                                                                <button class="btn btn-sm btn-primary"
+                                                                    ng-click="cancelTable($index)"
+                                                                    ng-hide="!enableEdit[{{$index}}]"><i
+                                                                        class="fa fa-times"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="text">Name:</label>
-                                            <input type="text" class="form-control" placeholder="Enter Name" id="email"
-                                                ng-model="customers.datasource.ref.name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Active:</label>
-                                    <input type="radio" ng-model="customers.active"
-                                        ng-checked="customers.active === 'Y'" value="Y" /> Yes
-                                    &nbsp;
-                                    <input type="radio" ng-model="customers.active"
-                                        ng-checked="customers.active === 'N'" value="N" /> No
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Locked:</label>
-                                    <input type="radio" ng-model="customers.locked"
-                                        ng-checked="customers.locked === 'Y'" value="Y"> Yes
-                                    &nbsp;
-                                    <input type="radio" ng-model="customers.locked"
-                                        ng-checked="customers.locked === 'N'" value="N"> No
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Published:</label>
-                                    <input type="radio" ng-model="customers.published"
-                                        ng-checked="customers.published === 'Y'" value="Y"> Yes
-                                    &nbsp;
-                                    <input type="radio" ng-model="customers.published"
-                                        ng-checked="customers.published === 'N'" value="N"> No
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Cache:</label>
-                                    <input type="radio" ng-model="customers.cache" ng-checked="customers.cache === 'Y'"
-                                        value="Y"> Yes
-                                    &nbsp;
-                                    <input type="radio" ng-model="customers.cache" ng-checked="customers.cache === 'N'"
-                                        value="N"> No
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Public:</label>
-                                    <input type="radio" ng-model="customers.publicFlag"
-                                        ng-checked="customers.publicFlag === 'Y'" value="Y"> Yes
-                                    &nbsp;
-                                    <input type="radio" ng-model="customers.publicFlag"
-                                        ng-checked="customers.publicFlag === 'N'" value="N"> No
-                                </div>
-                                <div class="form-group">
-                                    <label for="text">Prefix:</label>
-                                    <input type="text" class="form-control" placeholder="Enter Datapod typer"
-                                        id="prefix" disabled>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <button class="btn btn-info" ng-click="saveFormValues()">Save</button>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <button class="btn btn-danger" ng-click="cancelFormUpdate()">Cancel</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                            <div class="p-2">
+
+                                <div ng-controller="formUpdateCtrl">
+                                    <div class="card" style="width: 42rem;">
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="form-group">
+                                                    <label for="name">Name:</label>
+                                                    <input type="text" class="form-control" ng-model="order.name" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description">Description:</label>
+                                                    <input type="text" class="form-control"
+                                                        ng-model="order.description" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="orderset">Order Set:</label>
+                                                    <input type="text" class="form-control" ng-model="order.orderset" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-sm btn-info"
+                                                        ng-click="saveOrder()">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="width: 42rem;">
+                                        <div class="card-body">
+                                            <button class="btn btn-success" ng-click="enableAddData()"><i
+                                                    class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <div class=" table-responsive-sm">
+                                                <table class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Dispaly Name</th>
+                                                            <th>Name</th>
+                                                            <th>UUID</th>
+                                                            <th>Version</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-if="addData">
+                                                            <form>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="customerss.displayName" />
+                                                                </td>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="customerss.name" /></td>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="customerss.uuid" />
+                                                                </td>
+                                                                <td><input type="text" class="form-control"
+                                                                        ng-model="customerss.version" />
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-info"
+                                                                        ng-click="saveFormTable()">Save</button>
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-danger"
+                                                                        ng-click="disableForm()"><i
+                                                                            class="fa fa-times"></i></button>
+                                                                </td>
+                                                            </form>
+                                                        </tr>
+                                                        <tr ng-repeat="customer in customers">
+                                                            <td><input type="text" ng-model="customer.displayName"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableCustomerTableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td><input type="text" ng-model="customer.name"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableCustomerTableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td><input type="text" ng-model="customer.uuid"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableCustomerTableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td><input type="text" ng-model="customer.version"
+                                                                    class="form-control"
+                                                                    ng-disabled="!enableCustomerTableEdit[{{$index}}]" />
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-info"
+                                                                    ng-click="editCustomerTable($index)"
+                                                                    ng-hide="enableCustomerTableEdit[{{$index}}]"><i
+                                                                        class="fa fa-pencil-square-o"></i></button>
+                                                                <button type="submit" class="btn btn-sm btn-info"
+                                                                    ng-click="saveCustomerValues($index)"
+                                                                    ng-hide="!enableCustomerTableEdit[{{$index}}]"><i
+                                                                        class="fa fa-floppy-o"></i></button>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    ng-hide="enableCustomerTableEdit[{{$index}}]"
+                                                                    ng-click="deleteCustomerTable($index)"><i
+                                                                        class="fa fa-trash"></i></button>
+                                                                <button class="btn btn-sm btn-primary"
+                                                                    ng-click="cancelCustomerTable($index)"
+                                                                    ng-hide="!enableCustomerTableEdit[{{$index}}]"><i
+                                                                        class="fa fa-times"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="card-footer"></div>
             </div>
         </div>
     </div>
-</div>
-
-<div ng-controller="updateDataCtrl">
-    <div class="container mt-3">
-        <div class="card">
-            <div class="card-header">
-                <button class="btn btn-success" ng-click="enableAddData()">Add Data</button>
-            </div>
-            <div class="card-body">
-                <!--  <div class="row">-->
-                <div class=" table-responsive">
-                    <form>
-                        <table class="table table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Key</th>
-                                    <th>Null</th>
-                                    <th>Partition</th>
-                                    <th>Active</th>
-                                    <th>PII</th>
-                                    <th>CDE</th>
-                                    <th>Name</th>
-                                    <th>Display Name</th>
-                                    <th>Unit type</th>
-                                    <th>Scale</th>
-                                    <th>Precision</th>
-                                    <th>Domain</th>
-                                    <th>Length</th>
-                                    <th>Expression</th>
-                                    <th>Desplay Seq</th>
-                                    <th>Desc</th>
-                                    <th>type</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-if="addData">
-                                    <form>
-                                        <td><input type="text" ng-model="attributeDetailss.attributeId" /></td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.key" /></td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.nullFlag" /></td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.Partition" /></td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.active" /></td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.piiFlag" />
-                                        </td>
-                                        <td><input type="checkbox" ng-model="attributeDetailss.cdeFlag" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.name" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.dispName" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.attrUnitType" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.scale" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.precision" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.domain" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.length" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.expression" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.displaySeq" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.desc" /></td>
-                                        <td><input type="text" ng-model="attributeDetailss.type" /></td>
-                                        <td>
-                                            <button class="btn btn-info" ng-click="saveTable()">Save</button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger" ng-click="disableForm()">Disable
-                                                Form</button>
-                                        </td>
-                                    </form>
-                                </tr>
-                                <tr ng-repeat="attributeDetail in attributeDetails">
-                                    <td>{{attributeDetail.attributeId}}</td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.key"
-                                            ng-disabled="!enableEdit[{{$index}}]"
-                                            ng-checked="attributeDetail.key === true" value="0" />
-                                    </td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.nullFlag"
-                                            ng-checked="attributeDetail.nullFlag === true"
-                                            ng-disabled="!enableEdit[{{$index}}]" value="Y" />
-                                    </td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.Partition"
-                                            ng-checked="attributeDetail.Partition ===  true"
-                                            ng-disabled="!enableEdit[{{$index}}]" value="Y" />
-                                    </td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.active"
-                                            ng-checked="attributeDetail.active === true"
-                                            ng-disabled="!enableEdit[{{$index}}]" value="Y" />
-                                    </td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.piiFlag"
-                                            ng-checked="attributeDetail.piiFlag === true"
-                                            ng-disabled="!enableEdit[{{$index}}]" value="Y" />
-                                    </td>
-                                    <td><input type="checkbox" ng-model="attributeDetail.cdeFlag"
-                                            ng-checked="attributeDetail.cdeFlag === true"
-                                            ng-disabled="!enableEdit[{{$index}}]" value="Y" />
-                                    </td>
-                                    <td><input type="text" ng-model="attributeDetail.name"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.dispName"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.attrUnitType"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.scale"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.precision"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.domain"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.length"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.expression"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.displaySeq"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.desc"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td><input type="text" ng-model="attributeDetail.type"
-                                            ng-disabled="!enableEdit[{{$index}}]" /></td>
-                                    <td>
-                                        <button class="btn btn-info" ng-click="editTable($index)"
-                                            ng-hide="enableEdit[{{$index}}]">Edit</button>
-                                        <button type="submit" class="btn btn-info" ng-click="updateTable($index)"
-                                            ng-hide="!enableEdit[{{$index}}]">Update</button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger" ng-hide="enableEdit[{{$index}}]"
-                                            ng-click="deleteTable($index)">Delete</button>
-                                        <button class="btn btn-primary" ng-click="cancelTable($index)"
-                                            ng-hide="!enableEdit[{{$index}}]">Cancel</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- </div> -->
-    </div>
-</div>

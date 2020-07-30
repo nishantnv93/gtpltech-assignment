@@ -12723,3 +12723,21 @@ hr.transparent {
       float: left; }
   *[dir="rtl"] .callout-default {
     border-right-color: #536c79; }
+
+    @media (min-width: 576px) {
+      .modal-dialog { max-width: none; }
+    }
+    
+    .modal-dialog {
+      width: 100%;
+      height: 92%;
+      padding: 0;
+    }
+    
+    .modal-content {
+      height: 99%;
+    }
+
+    .modal-body {
+      overflow-x: auto;
+    }
